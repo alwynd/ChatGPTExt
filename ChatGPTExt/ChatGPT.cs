@@ -30,6 +30,12 @@ namespace ChatGPTExt
 
         /// <summary>
         /// ChatGPT invocation.
+        /// The request will be amended as follows:
+        /// - If there is text in the clipboard, it will be assumed to be code, and will be appended to the contents of the request file such as:
+        ///     request text from requestFile
+        ///     ```
+        ///     clipboard text
+        ///     ```
         /// </summary>
         public async Task<string> InvokeChatGPT(string requestFile)
         {

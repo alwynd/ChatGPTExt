@@ -44,16 +44,16 @@
             {
                 Debug($"{nameof(Program)}.Main arg: {arg}");
 
-                if (prev == "-api-key") InstanceGPT.ApiKey = arg;
-                if (prev == "-org-id") InstanceGPT.OrganizationId = arg;
-                if (prev == "-project-id") InstanceGPT.ProjectId = arg;
-                if (prev == "-model") InstanceGPT.Model = arg;
-                if (prev == "-system") InstanceGPT.SystemMessage = arg;
-                if (prev == "-request")
-                {
-                    mode = GPTMode.Request;
-                    request = arg;
-                }
+                if (prev == "-api-key") InstanceGPT.ApiKey = arg;           // The api key from open ai.
+                if (prev == "-org-id") InstanceGPT.OrganizationId = arg;    // The Organization id from open ai.                ( required if using a project api key ) 
+                if (prev == "-project-id") InstanceGPT.ProjectId = arg;     // The Project id from open ai.                     ( required if using a project api key )
+                if (prev == "-model") InstanceGPT.Model = arg;              // The gpt model, defaults to gpt-4o-mini
+                if (prev == "-system") InstanceGPT.SystemMessage = arg;     // The system message to configure chat gpt with.   ( defaults to a code assistant/reviewer. )
+                if (prev == "-request")                                     // The file that contains the request in plain text as what to do with the code
+                {                                                           
+                    mode = GPTMode.Request;                                  
+                    request = arg;                                           
+                }                                                            
 
                 prev = arg;
 
