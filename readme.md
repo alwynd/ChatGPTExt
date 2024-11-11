@@ -5,7 +5,7 @@ This command-line tool interacts with OpenAI's ChatGPT API, allowing users to pe
 
 Input will be from an input file, and default behavior is to append "``` paste from clipboard ```" to the request for code review/edit.
 
-The response code will be extracted and paste into the clipboard.
+The response "```source code```" will be extracted and paste into the clipboard.
 
 Clipboard behavior may be disabled for input from file and output to console only.
 
