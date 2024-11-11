@@ -23,6 +23,10 @@ The tool supports various command-line options to configure API settings and spe
 - **Optional Parameters for Requests**:
   - `-model gptmodel`: Sets the specific GPT model to use (defaults to a general-purpose GPT model if unspecified).
   - `-system SYSTEMMESSAGE`: Sets an optional system message to configure the model’s response context (e.g., as a code assistant/reviewer).
+  - `-noclip`: Disables clipboard integration.
+	- Input from request file only.
+	- Output to console only.
+
 
 
 ### Examples
