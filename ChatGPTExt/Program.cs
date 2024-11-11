@@ -33,8 +33,9 @@
                   $"Where Options are:{Environment.NewLine}" +
                   $"\t [-list-models] Lists currently available gpt models." +
                   $"\t [-request TEXT] Code review/edit request.{Environment.NewLine}" +
-                  $"\t\t [-Model gptmodel] optional{Environment.NewLine}" +
-                  $"\t\t [-system SYSTEMMESSAGE] optional{Environment.NewLine}" +
+                  $"\t\t [-Model gptmodel] optional Specify the GPT model.{Environment.NewLine}" +
+                  $"\t\t [-system SYSTEMMESSAGE] optional Specify the GPT system message.{Environment.NewLine}" +
+                  $"\t\t [-noclip] optional Disable clipboard integration ( output to console only ){Environment.NewLine}" +
                   $"");
 
 
@@ -53,7 +54,14 @@
                 {                                                           
                     mode = GPTMode.Request;                                  
                     request = arg;                                           
-                }                                                            
+                }
+
+                if (arg == "-noclip")
+                {
+                    Debug($"{nameof(Program)}.Main Disabling clipboard integration.");
+                    InstanceGPT.AppendCodeFromClipboard = false;
+                    InstanceGPT.PasteResultToClipboard = false;
+                }
 
                 prev = arg;
 

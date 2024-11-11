@@ -18,6 +18,7 @@ namespace ChatGPTExt
         public string ProjectId { get; set; } = "";
         public string ApiKey { get; set; } = "";
         public bool AppendCodeFromClipboard { get; set; } = true;
+        public bool PasteResultToClipboard { get; set; } = true;
 
         public string SystemMessage { get; set; } =
             "You are an expert code reviewer and assistant specialized in optimization, efficiency, and best practices. Your tasks include: \n" +
@@ -39,14 +40,16 @@ namespace ChatGPTExt
         /// </summary>
         public async Task<string> InvokeChatGPT(string requestFile)
         {
-            Program.Debug($"{GetType().Name}.InvokeChatGPT:-- START, , model: {Model}, system: {SystemMessage}, requestFile: {requestFile}");
+            Program.Debug($"{GetType().Name}.InvokeChatGPT:-- START, , model: {Model}, system: {SystemMessage}, requestFile: {requestFile}, use clipboard: {PasteResultToClipboard}");
             string request = await File.ReadAllTextAsync(requestFile);
+
+            Clipboard history = null;
 
             if (AppendCodeFromClipboard)
             {
                 try
                 {
-                    Clipboard history = new();
+                    history = new();
                     string text = await history.GetTextAsync();
                     Program.Debug($"{GetType().Name}.InvokeChatGPT got clipboard text: {text}");
 
@@ -108,8 +111,35 @@ namespace ChatGPTExt
                 }
 
                 Program.Debug($"{GetType().Name}.InvokeChatGPT, request#: {random} content: {content}");
-                return content;
 
+                if (PasteResultToClipboard && history != null)
+                {
+                    if (content.Contains("```", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        var start = content.IndexOf("```", StringComparison.InvariantCultureIgnoreCase) + 3;
+
+                        // Find the end of any language identifier
+                        while (start < content.Length && char.IsLetter(content[start]))
+                        {
+                            start++;
+                        }
+
+                        // Skip whitespace after the language identifier if present
+                        start = content[start] == '\n' || content[start] == '\r' ? start + 1 : start;
+
+                        var end = content.LastIndexOf("```", StringComparison.InvariantCultureIgnoreCase);
+
+                        // Extract and trim the code content
+                        var codeContent = content.Substring(start, end - start).Trim();
+                        await history.SetTextAsync(codeContent);
+                    }
+                    else
+                    {
+                        await history.SetTextAsync(content);
+                    }
+                }
+
+            return content;
         }
 
 
